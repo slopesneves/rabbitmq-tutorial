@@ -16,8 +16,10 @@ public class Worker {
         Channel channel = connection.createChannel();
 
         boolean durable = true;
+        int prefetchCount = 1;
 
         channel.queueDeclare(TASK_QUEUE_NAME, durable, false, false, null);
+        channel.basicQos(prefetchCount);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         Consumer consumer = new DefaultConsumer(channel) {
@@ -36,7 +38,7 @@ public class Worker {
                 }
             }
         };
-        boolean autoAck = false;
+        boolean autoAck = true;
         channel.basicConsume(TASK_QUEUE_NAME, autoAck, consumer);
     }
 
