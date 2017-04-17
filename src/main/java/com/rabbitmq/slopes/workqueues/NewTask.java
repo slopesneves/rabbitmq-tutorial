@@ -3,6 +3,7 @@ package com.rabbitmq.slopes.workqueues;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -19,7 +20,7 @@ public class NewTask {
 
             channel.queueDeclare(TASK_QUEUE_NAME, false, false, false, null);
             String message = getMessage(args);
-            channel.basicPublish("", TASK_QUEUE_NAME, null, message.getBytes());
+            channel.basicPublish("", TASK_QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
             System.out.println(" [x] Sent '" + message + "'");
 
             channel.close();
